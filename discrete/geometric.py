@@ -3,7 +3,7 @@ import time
 from multiprocessing import Pool, cpu_count
 from scipy.stats import geom
 
-N = pow(10, 5)
+N = pow(10, 6)
 p = 0.002
 expected_value = 1 / p
 variance = (1 - p) / p ** 2
@@ -45,6 +45,10 @@ def batch_simulation():
 
     sum_samples = 0
     sum_of_squares = 0
+
+    # sum_samples = sum(x[0] for x in results)
+    # sum_of_squares = sum(x[1] for x in results)
+
     for res in results:
         sum_samples += res[0]
         sum_of_squares += res[1]
@@ -91,6 +95,6 @@ def scipy_simulation():
 
 
 if __name__ == "__main__":
-    simulation()
+    # simulation()
     batch_simulation()
     scipy_simulation()
