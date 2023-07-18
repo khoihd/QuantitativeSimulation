@@ -25,8 +25,8 @@ def simulation():
     print("Empirical Expected Value: {}".format(total / N))
     print("Theoretical Expected Value: {}".format(expected))
 
-    print("Empirical Expected Value: {}".format(total_of_squares / N - (total / N) ** 2))
-    print("Theoretical Expected Value: {}".format(variance))
+    print("Empirical Variance: {}".format(total_of_squares / N - (total / N) ** 2))
+    print("Theoretical Variance: {}".format(variance))
 
     print("Runtime: {} seconds".format(time.time() - start_time))
 
@@ -42,8 +42,8 @@ def batch_simulation():
     print("Empirical Expected Value: {}".format(total_success / N))
     print("Theoretical Expected Value: {}".format(expected))
 
-    print("Empirical Expected Value: {}".format(total_success_squares / N - (total_success / N) ** 2))
-    print("Theoretical Expected Value: {}".format(variance))
+    print("Empirical Variance: {}".format(total_success_squares / N - (total_success / N) ** 2))
+    print("Theoretical Variance: {}".format(variance))
 
     print("Runtime: {} seconds".format(time.time() - start_time))
 
@@ -60,8 +60,8 @@ def scipy_simulation():
     print("Empirical Expected Value: {}".format(total_success / N))
     print("Theoretical Expected Value: {}".format(expected))
 
-    print("Empirical Expected Value: {}".format(total_success_squares / N - (total_success / N) ** 2))
-    print("Theoretical Expected Value: {}".format(variance))
+    print("Empirical Variance: {}".format(total_success_squares / N - (total_success / N) ** 2))
+    print("Theoretical Variance: {}".format(variance))
 
     print("Runtime: {} seconds".format(time.time() - start_time))
 
