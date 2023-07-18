@@ -3,7 +3,7 @@ import time
 from multiprocessing import Pool, cpu_count
 from scipy.stats import nbinom
 
-N = pow(10, 5)
+N = pow(10, 6)
 p = 0.02
 r = 10
 expected_value = r / p
