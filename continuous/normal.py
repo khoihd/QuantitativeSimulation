@@ -13,7 +13,7 @@ variance = sigma ** 2
 
 # X = sqrt(-2lnU) * cos(2piV)
 # Y = sqrt(-2lnU) * sin(2piV)
-def box_muller_simulate():
+def box_muller_simulation():
     start_time = time.time()
 
     U = uniform.rvs(0, 1, N)
@@ -67,7 +67,7 @@ def rejection_sampling():
     print("Runtime: {} seconds".format(time.time() - start_time))
 
 
-def scipy_simulate():
+def scipy_simulation():
     start_time = time.time()
 
     samples = norm.rvs(loc=mu, scale=sigma, size=N)
@@ -83,6 +83,6 @@ def scipy_simulate():
 
 
 if __name__ == "__main__":
-    # box_muller_simulate()
-    # scipy_simulate()
+    box_muller_simulation()
     rejection_sampling()
+    scipy_simulation()
