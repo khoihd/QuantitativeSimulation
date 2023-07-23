@@ -1,20 +1,20 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.stats import gamma
+from scipy.stats import beta as beta_scipy
 import time
 
 N = np.power(10, 7)
 
-lambda_par = 3
-n = 6
-expected_value = n / lambda_par
-variance = n / lambda_par ** 2
+alpha = 3
+beta = 5
+expected_value = alpha / (alpha + beta)
+variance = alpha * beta / ((alpha + beta + 1) * (alpha + beta)**2)
 
 
 def scipy_simulation():
     start_time = time.time()
 
-    samples = gamma.rvs(n, 1/lambda_par, size=N)
+    samples = beta_scipy.rvs(alpha, beta, size=N)
 
     plt.hist(samples, bins=200)
     plt.show()
