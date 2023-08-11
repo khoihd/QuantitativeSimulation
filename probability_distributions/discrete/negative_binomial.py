@@ -7,14 +7,14 @@ N = pow(10, 6)
 p = 0.02
 r = 10
 expected_value = r / p
-variance = r * (1 - p) / p ** 2
+variance = r * (1-p) / p**2
 
 
 def simulation():
     start_time = time.time()
 
-    samples = np.empty(
-        N)  # instead of appending new values, let's initialize a fixed-size array and update its elements instead
+    # instead of appending new values, let's initialize a fixed-size array and update its elements instead
+    samples = np.empty(N)
     sample_squares = np.empty(N)
     for i in np.arange(N):
         count = 0
@@ -27,7 +27,7 @@ def simulation():
             if success == r:
                 break
         samples[i] = count
-        sample_squares[i] = count ** 2
+        sample_squares[i] = count**2
 
     sum_samples = sum(samples)
     sum_of_squares = sum(sample_squares)
@@ -36,7 +36,7 @@ def simulation():
     print("Empirical Expected Value: {}".format(sum_samples / N))
     print("Theoretical Expected Value: {}".format(expected_value))
 
-    print("Empirical Variance: {}".format(sum_of_squares / N - (sum_samples / N) ** 2))
+    print("Empirical Variance: {}".format(sum_of_squares/N - (sum_samples/N)**2))
     print("Theoretical Variance: {}".format(variance))
 
     print("Runtime: {} seconds".format(time.time() - start_time))
@@ -62,7 +62,7 @@ def batch_simulation():
     print("Empirical Expected Value: {}".format(sum_samples / N))
     print("Theoretical Expected Value: {}".format(expected_value))
 
-    print("Empirical Variance: {}".format(sum_of_squares / N - (sum_samples / N) ** 2))
+    print("Empirical Variance: {}".format(sum_of_squares/N - (sum_samples/N)**2))
     print("Theoretical Variance: {}".format(variance))
     #
     print("Runtime: {} seconds".format(time.time() - start_time))
@@ -95,7 +95,7 @@ def scipy_simulation():
     print("Empirical Expected Value: {}".format(sum_samples / N))
     print("Theoretical Expected Value: {}".format(expected_value))
 
-    print("Empirical Variance: {}".format(sum_of_squares / N - (sum_samples / N) ** 2))
+    print("Empirical Variance: {}".format(sum_of_squares/N - (sum_samples/N)**2))
     print("Theoretical Variance: {}".format(variance))
 
     print("Runtime: {} seconds".format(time.time() - start_time))

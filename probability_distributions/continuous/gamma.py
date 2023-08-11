@@ -8,7 +8,7 @@ N = np.power(10, 7)
 lambda_par = 3
 n = 6
 expected_value = n / lambda_par
-variance = n / lambda_par ** 2
+variance = n / lambda_par**2
 
 
 def scipy_simulation():

@@ -1,8 +1,8 @@
 import numpy as np
 import time
 
-N = np.power(10, 6)
-type_count = 2
+N = np.power(10, 5)
+type_count = 4
 
 
 def simulation():

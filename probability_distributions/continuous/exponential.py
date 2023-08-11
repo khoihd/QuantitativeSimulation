@@ -6,13 +6,17 @@ import time
 N = np.power(10, 7)
 lambda_par = 3
 expected_value = 1 / lambda_par
-variance = 1 / lambda_par ** 2
+variance = 1 / lambda_par**2
+
+
+def inverse_cdf(y):
+    return -1/lambda_par * np.log(1-y)
 
 
 def inverse_cdf_simulation():
     start_time = time.time()
 
-    inverse_cdf = lambda y: -1 / lambda_par * np.log(1 - y)
+    # inverse_cdf = lambda y: -1 / lambda_par * np.log(1 - y)
     samples = list(map(inverse_cdf, uniform.rvs(0, 1, N)))
 
     # plt.hist(samples, bins=200)
@@ -31,7 +35,7 @@ def inverse_cdf_simulation():
 def scipy_simulation():
     start_time = time.time()
 
-    samples = expon.rvs(0, 1/lambda_par, N)
+    samples = expon.rvs(0, 1 / lambda_par, N)
 
     # plt.hist(samples, bins=200)
     # plt.show()

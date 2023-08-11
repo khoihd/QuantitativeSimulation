@@ -31,7 +31,7 @@ def scipy_simulation():
     print("Empirical Expected Value: {}".format(sum_samples / N))
     print("Theoretical Expected Value: {}".format(expected_value))
 
-    print("Empirical Variance: {}".format(sum_of_squares / N - (sum_samples / N) ** 2))
+    print("Empirical Variance: {}".format(sum_of_squares/N - (sum_samples/N)**2))
     print("Theoretical Variance: {}".format(variance))
 
     print("Runtime: {} seconds".format(time.time() - start_time))

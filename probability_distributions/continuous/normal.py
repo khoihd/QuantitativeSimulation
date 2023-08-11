@@ -8,7 +8,7 @@ mu = 0
 sigma = 3
 
 expected_value = mu
-variance = sigma ** 2
+variance = sigma**2
 
 
 # X = sqrt(-2lnU) * cos(2piV)
@@ -19,8 +19,8 @@ def box_muller_simulation():
     U = uniform.rvs(0, 1, N)
     V = uniform.rvs(0, 1, N)
 
-    X = np.sqrt(-2 * np.log(U)) * np.cos(2 * np.pi * V) * sigma + mu
-    Y = np.sqrt(-2 * np.log(U)) * np.sin(2 * np.pi * V) * sigma + mu
+    X = np.sqrt(-2*np.log(U)) * np.cos(2*np.pi*V) * sigma + mu
+    Y = np.sqrt(-2*np.log(U)) * np.sin(2*np.pi*V) * sigma + mu
 
     # Test by plotting the probability distribution
     plt.hist(X, bins=200)
@@ -36,20 +36,27 @@ def box_muller_simulation():
     print("Runtime: {} seconds".format(time.time() - start_time))
 
 
+def uniform_pdf(a, b):
+    return 1 / (b-a)
+
+
+def normal_pdf(t):
+    return 1 / np.sqrt(2*np.pi) * np.exp(-1/2 * t**2)
+
+
 # Sample standard normal from Uniform(a, b)
 def rejection_sampling():
     start_time = time.time()
 
     a, b = -100, 100
-    M = (b - a) / np.sqrt(2 * np.pi)
-    uniform_pdf = lambda z: 1 / (b - a)
-    normal_pdf = lambda t: 1 / np.sqrt(2 * np.pi) * np.exp(-t ** 2 / 2)
+    M = (b-a) / np.sqrt(2*np.pi)
+    # normal_pdf = lambda t: 1 / np.sqrt(2 * np.pi) * np.exp(-t ** 2 / 2)
     samples = np.zeros(N)
-    uniform_dist = uniform(a, b - a)
+    uniform_dist = uniform(a, b-a)
     for i in range(N):
         while True:
             x = uniform_dist.rvs(1)
-            y = bernoulli.rvs(normal_pdf(x) / (M * uniform_pdf(x)))
+            y = bernoulli.rvs(normal_pdf(x) / (M * uniform_pdf(a, b)))
             if y:
                 samples[i] = x
                 break

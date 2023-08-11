@@ -7,8 +7,8 @@ N = np.power(10, 7)
 
 alpha = 3
 beta = 5
-expected_value = alpha / (alpha + beta)
-variance = alpha * beta / ((alpha + beta + 1) * (alpha + beta)**2)
+expected_value = alpha / (alpha+beta)
+variance = alpha * beta / ((alpha+beta+1) * (alpha+beta)**2)
 
 
 def scipy_simulation():

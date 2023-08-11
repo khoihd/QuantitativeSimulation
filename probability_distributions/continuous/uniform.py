@@ -6,15 +6,15 @@ N = pow(10, 9)
 a = 50
 b = 100
 
-expected_value = (a + b) / 2
-variance = (b - a) ** 2 / 12
+expected_value = 1/2 * (a+b)
+variance = 1/12 * (b-a)**2
 
 
 # X ~ Uniform[0, 100)
 def simulate():
     start_time = time.time()
 
-    samples = np.random.random(N) * (b - a) + a
+    samples = np.random.random(N) * (b-a) + a
 
     print("--------------------------------------------------------")
     print("Empirical Expected Value: {}".format(np.mean(samples)))

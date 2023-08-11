@@ -6,7 +6,7 @@ from scipy.stats import geom
 N = pow(10, 6)
 p = 0.002
 expected_value = 1 / p
-variance = (1 - p) / p ** 2
+variance = (1-p) / p**2
 
 
 def simulation():
@@ -23,7 +23,7 @@ def simulation():
             if np.random.random() <= p:
                 break
         samples[i] = count
-        sample_squares[i] = count ** 2
+        sample_squares[i] = count**2
 
     sum_samples = sum(samples)
     sum_of_squares = sum(sample_squares)
@@ -32,7 +32,7 @@ def simulation():
     print("Empirical Expected Value: {}".format(sum_samples / N))
     print("Theoretical Expected Value: {}".format(expected_value))
 
-    print("Empirical Variance: {}".format(sum_of_squares / N - (sum_samples / N) ** 2))
+    print("Empirical Variance: {}".format(sum_of_squares/N - (sum_samples/N)**2))
     print("Theoretical Variance: {}".format(variance))
 
     print("Runtime: {} seconds".format(time.time() - start_time))

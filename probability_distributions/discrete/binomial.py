@@ -7,7 +7,7 @@ n = 1000
 
 N = pow(10, 4)
 expected = n * p
-variance = n * p * (1 - p)
+variance = n * p * (1-p)
 
 
 def simulation():
@@ -19,13 +19,13 @@ def simulation():
     for _ in range(N):
         success = sum(np.random.random(n) <= 0.3)
         total += success
-        total_of_squares += success ** 2
+        total_of_squares += success**2
 
     print("--------------------------------------------------------")
     print("Empirical Expected Value: {}".format(total / N))
     print("Theoretical Expected Value: {}".format(expected))
 
-    print("Empirical Variance: {}".format(total_of_squares / N - (total / N) ** 2))
+    print("Empirical Variance: {}".format(total_of_squares/N - (total/N)**2))
     print("Theoretical Variance: {}".format(variance))
 
     print("Runtime: {} seconds".format(time.time() - start_time))
@@ -42,7 +42,7 @@ def batch_simulation():
     print("Empirical Expected Value: {}".format(total_success / N))
     print("Theoretical Expected Value: {}".format(expected))
 
-    print("Empirical Variance: {}".format(total_success_squares / N - (total_success / N) ** 2))
+    print("Empirical Variance: {}".format(total_success_squares/N - (total_success/N)**2))
     print("Theoretical Variance: {}".format(variance))
 
     print("Runtime: {} seconds".format(time.time() - start_time))
