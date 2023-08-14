@@ -13,6 +13,7 @@ variance = 1/12 * (a-b)**2
 
 
 def simulation():
+    """Uniformly choose value from a pre-created range [a, b] in an iterative manner."""
     start = time.time()
 
     sample_space = [i for i in range(a, b+1)]
@@ -34,6 +35,7 @@ def simulation():
 
 
 def batch_simulation():
+    """Uniformly choose N values from a pre-created range [a, b]."""
     start = time.time()
 
     sample_space = [i for i in range(a, b+1)]
@@ -54,6 +56,7 @@ def batch_simulation():
 
 
 def scipy_simulation():
+    """Sample uniform distribution from scipy library."""
     start = time.time()
     u = randint(a, b+1)
     samples = u.rvs(N)
