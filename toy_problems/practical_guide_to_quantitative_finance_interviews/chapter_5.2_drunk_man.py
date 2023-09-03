@@ -1,6 +1,7 @@
 import numpy as np
+import time
 
-N = pow(10, 6)
+N = pow(10, 5)
 
 
 def simulate_random_walk():
@@ -13,10 +14,15 @@ def simulate_random_walk():
 
     :return:
     """
-    reach_100 = 0
+
+    start_time = time.time()
+
+    reach_100 = 0  # for probability
+    steps = 0  # for expected value of steps
     for _ in range(N):
         pos = 17
         while 0 < pos < 100:
+            steps += 1
             prob = np.random.random()
             if prob <= 0.5:
                 pos -= 1
@@ -26,6 +32,8 @@ def simulate_random_walk():
             reach_100 += 1
 
     print("Probability is {}".format(reach_100 / N))
+    print("Expected number of step reaching either 0 or 100: {}".format(steps / N))
+    print("Runtime: {} ms".format(time.time() - start_time))
 
 
 if __name__ == "__main__":
