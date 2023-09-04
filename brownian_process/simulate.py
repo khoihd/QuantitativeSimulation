@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 from brownian_process.RandomWalk import RandomWalk
-from brownian_process.WienerProcess import WienerProcess
+from brownian_process.BrownianMotion import BrownianMotion
 
 def simulate_random_walks():
     rw = RandomWalk(10000, 0.49)
@@ -12,8 +12,8 @@ def simulate_random_walks():
 
 
 def simulate_brownian_motion():
-    rw = WienerProcess()
-    brownian_motions = {"line_" + str(i): rw.simulate() for i in range(10)}
+    rw = BrownianMotion()
+    brownian_motions = {"line_" + str(i): rw.simulate_no_drift() for i in range(10)}
     for k, v in brownian_motions.items():
         plt.plot(v, label=k)
     plt.legend()
