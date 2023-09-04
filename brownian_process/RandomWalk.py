@@ -9,4 +9,3 @@ class RandomWalk:
     def simulate(self):
         jumps = np.where(np.random.random(self.steps) <= self.p, 1, -1)
         return np.cumsum(jumps)
-    
