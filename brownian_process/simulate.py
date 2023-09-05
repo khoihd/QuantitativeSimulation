@@ -11,9 +11,18 @@ def simulate_random_walks():
     plt.show()
 
 
-def simulate_brownian_motion():
+def simulate_brownian_motion_no_drift():
     rw = BrownianMotion()
-    brownian_motions = {"line_" + str(i): rw.simulate_no_drift() for i in range(10)}
+    brownian_motions = {"line_" + str(i): rw.simulate() for i in range(10)}
+    for k, v in brownian_motions.items():
+        plt.plot(v, label=k)
+    plt.legend()
+    plt.show()
+
+
+def simulate_brownian_motion_with_drift():
+    rw = BrownianMotion(mu=0.5)
+    brownian_motions = {"line_" + str(i): rw.simulate() for i in range(10)}
     for k, v in brownian_motions.items():
         plt.plot(v, label=k)
     plt.legend()
@@ -22,6 +31,7 @@ def simulate_brownian_motion():
 
 if __name__ == "__main__":
     # simulate_random_walks()
-    simulate_brownian_motion()
+    # simulate_brownian_motion_no_drift()
+    simulate_brownian_motion_with_drift()
 
 
