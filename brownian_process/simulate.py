@@ -1,4 +1,7 @@
 import matplotlib.pyplot as plt
+import numpy as np
+
+from brownian_process.GeometricBrownianMotion import GeometricBrownianMotion
 from brownian_process.RandomWalk import RandomWalk
 from brownian_process.BrownianMotion import BrownianMotion
 
@@ -21,7 +24,16 @@ def simulate_brownian_motion_no_drift():
 
 
 def simulate_brownian_motion_with_drift():
-    rw = BrownianMotion(mu=0.5)
+    rw = BrownianMotion(mu=1, steps=np.power(10, 5))
+    brownian_motions = {"line_" + str(i): rw.simulate() for i in range(10)}
+    for k, v in brownian_motions.items():
+        plt.plot(v, label=k)
+    plt.legend()
+    plt.show()
+
+
+def simulate_geometric_bm():
+    rw = GeometricBrownianMotion(mu=0, steps=np.power(10, 5))
     brownian_motions = {"line_" + str(i): rw.simulate() for i in range(10)}
     for k, v in brownian_motions.items():
         plt.plot(v, label=k)
@@ -32,6 +44,6 @@ def simulate_brownian_motion_with_drift():
 if __name__ == "__main__":
     # simulate_random_walks()
     # simulate_brownian_motion_no_drift()
-    simulate_brownian_motion_with_drift()
-
+    # simulate_brownian_motion_with_drift()
+    simulate_geometric_bm()
 
