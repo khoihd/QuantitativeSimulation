@@ -1,4 +1,4 @@
-from brownian_process.BrownianMotion import BrownianMotion
+from brownian_motion.BrownianMotion import BrownianMotion
 from overrides import override
 import numpy as np
 

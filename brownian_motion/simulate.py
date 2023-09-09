@@ -1,9 +1,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-from brownian_process.GeometricBrownianMotion import GeometricBrownianMotion
-from brownian_process.RandomWalk import RandomWalk
-from brownian_process.BrownianMotion import BrownianMotion
+from brownian_motion.GeometricBrownianMotion import GeometricBrownianMotion
+from brownian_motion.RandomWalk import RandomWalk
+from brownian_motion.BrownianMotion import BrownianMotion
 
 def simulate_random_walks():
     rw = RandomWalk(10000, 0.49)
