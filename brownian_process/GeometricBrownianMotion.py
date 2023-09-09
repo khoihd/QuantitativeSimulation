@@ -9,12 +9,9 @@ class GeometricBrownianMotion(BrownianMotion):
 
     @override
     def simulate(self):
-        delta_t = self.duration / self.steps
-        # dB(t)
-        jumps = np.sqrt(delta_t) * np.random.standard_normal(self.steps)
-        # dD(t) = (mu - sigma^2/2)* dt + sigma * dB(t)
-        jumps = (self.mu - 0.5*self.sigma**2)*delta_t + self.sigma*jumps
-        # d(logGt) = e^{mu - sigma^2/2)*dt + sigma*dB(t)}
-        jumps = np.exp(jumps)
-        jumps[0] = 1
-        return np.cumprod(jumps)
+        brownian_motion = BrownianMotion(0, 1, self.duration, self.steps)
+        brownian_motion = brownian_motion.simulate()
+
+        # D(t) = D(0) * exp{ (mu - sigma^2/2)* dt + sigma * dB(t)}
+        geometric_bm = np.exp((self.mu - 0.5*self.sigma**2) * np.linspace(0, self.duration, self.steps) + self.sigma * brownian_motion)
+        return geometric_bm
