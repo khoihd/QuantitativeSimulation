@@ -6,7 +6,7 @@ from brownian_motion.RandomWalk import RandomWalk
 from brownian_motion.BrownianMotion import BrownianMotion
 
 def simulate_random_walks():
-    rw = RandomWalk(10000, 0.49)
+    rw = RandomWalk(10000, 0.5)
     random_walks = {"line_" + str(i): rw.simulate() for i in range(10)}
     for k, v in random_walks.items():
         plt.plot(v, label=k)
