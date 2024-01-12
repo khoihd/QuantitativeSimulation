@@ -7,13 +7,12 @@ class AutoRegressive:
         self.lag = len(coefficients)
         self.mean = mean
 
-    def simulate(self, timestep, mode='zero'):
+    def simulate(self, timestep, init='zero'):
         result = np.zeros(timestep)
-        if mode == 'zero':
-            pass
-        elif mode == 'mean':
+
+        if init == 'mean':
             result[:self.lag] = self.mean
-        elif mode == 'random':
+        elif init == 'random':
             result[:self.lag] = np.random.standard_normal(self.lag)
 
         for i in range(self.lag, timestep):
