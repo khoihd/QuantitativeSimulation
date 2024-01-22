@@ -55,6 +55,11 @@ def plot_frontier(returns, volatility, sharpe_ratio):
     plt.figure(figsize=(12, 8))
     plt.scatter(volatility, returns, c=sharpe_ratio, cmap='viridis')
     plt.colorbar(label='Sharpe Ratio')
+
+    max_sr_ret = returns[sharpe_ratio.argmax()]
+    max_sr_vol = volatility[sharpe_ratio.argmax()]
+    plt.scatter(max_sr_vol, max_sr_ret, c='red', s=50)  # red dot
+
     plt.xlabel('Volatility')
     plt.ylabel('Return')
     plt.show()
