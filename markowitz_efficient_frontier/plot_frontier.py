@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-import yfinance as yf
+from scipy.optimize import minimize
 
 
 def get_data():
@@ -22,7 +22,12 @@ def get_data():
     return df
 
 
-def compute_frontier(stock_prices):
+stock_prices = get_data()
+stock_returns = np.log(stock_prices / stock_prices.shift(1))
+stock_returns.dropna(axis=0, inplace=True)
+
+
+def compute_frontier():
     iterations = 100000
     volatility = np.zeros(iterations)
     returns = np.zeros(iterations)
@@ -30,42 +35,85 @@ def compute_frontier(stock_prices):
 
     n_days, n_portfolios = stock_prices.shape
 
-    stock_returns = np.log(stock_prices / stock_prices.shift(1))
-    stock_returns.dropna(axis=0, inplace=True)
-
     for i in range(iterations):
         print("Running {}".format(i))
         weights = np.random.random(n_portfolios)
         weights = weights / weights.sum()
-        weights = weights.reshape(-1, 1)
 
-        expected_return = np.sum(weights.flatten() * stock_returns.mean() * 252)
-        std_return = np.matmul(np.matmul(weights.T, stock_returns.cov().values), weights) * 252
-        std_return = std_return[0][0]
-        sr = expected_return / std_return
+        expected_return, std_return, sr = get_sharpe_ratio(weights)
 
         returns[i] = expected_return
         volatility[i] = std_return
         sharpe_ratio[i] = sr
 
-    return returns, volatility, sharpe_ratio 
+    return returns, volatility, sharpe_ratio
+
+
+def minimize_neg_sharpe(weights):
+    return -sharpe_ratio[2]
+
+
+def get_sharpe_ratio(weights):
+    weights = weights.reshape(-1, 1)
+
+    expected_return = np.sum(weights.flatten() * stock_returns.mean() * 252)
+    std_return = np.matmul(np.matmul(weights.T, stock_returns.cov().values), weights) * 252
+    std_return = std_return[0][0]
+    sr = expected_return / std_return
+
+    return expected_return, std_return, sr
+
+
+# Return 0 if the equality constraint is satisfied
+def check_sum(weights):
+    return sum(weights) - 1
+
+
+def solve_frontier():
+    cons = ({'type': 'eq', 'fun': check_sum})
+    bounds = ((0, 1), (0, 1), (0, 1), (0, 1))
+    init_guess = [0.25, 0.25, 0.25, 0.25]
+
+    opt_results = minimize(minimize_neg_sharpe, init_guess, bounds=bounds, constraints=cons)
+    print(opt_results)
+    return opt_results.x
+
+
+def minimize_volatility(weights):
+    return get_sharpe_ratio(weights)[1]
 
 
 def plot_frontier(returns, volatility, sharpe_ratio):
     plt.figure(figsize=(12, 8))
-    plt.scatter(volatility, returns, c=sharpe_ratio, cmap='viridis')
+    plt.scatter(volatility, returns, c=sharpe_ratio, s=10, cmap='viridis')
     plt.colorbar(label='Sharpe Ratio')
 
-    max_sr_ret = returns[sharpe_ratio.argmax()]
-    max_sr_vol = volatility[sharpe_ratio.argmax()]
-    plt.scatter(max_sr_vol, max_sr_ret, c='red', s=50)  # red dot
+    min_ret, max_ret = min(returns), max(returns)
+    min_t_ret = np.floor(min_ret * 100) / 100
+    max_t_ret = np.ceil(max_ret * 100) / 100
 
+    frontier_x = []
+    frontier_y = np.linspace(min_t_ret, max_t_ret, 100)
+
+    print([min_t_ret, max_t_ret])
+
+    for t_ret in frontier_y:
+        cons = ({'type': 'eq', 'fun': check_sum},
+                {'type': 'eq', 'fun': lambda w: get_sharpe_ratio(w)[0] - t_ret}
+                )
+        bounds = ((0, 1), (0, 1), (0, 1), (0, 1))
+        init_guess = [0.25, 0.25, 0.25, 0.25]
+
+        opt_results = minimize(minimize_volatility, init_guess, bounds=bounds, constraints=cons)
+        opt_weights = opt_results.x
+        frontier_x.append(get_sharpe_ratio(opt_weights)[1])
+
+    plt.scatter(frontier_x, frontier_y, c='red', s=10)  # red dot
     plt.xlabel('Volatility')
     plt.ylabel('Return')
     plt.show()
 
 
 if __name__ == "__main__":
-    df = get_data()
-    returns, volatility, sharpe_ratio = compute_frontier(df)
+    returns, volatility, sharpe_ratio = compute_frontier()
     plot_frontier(returns, volatility, sharpe_ratio)
