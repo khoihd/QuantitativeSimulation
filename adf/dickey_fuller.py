@@ -1,7 +1,70 @@
 import numpy as np
+import pandas as pd
 from statsmodels.tsa.stattools import adfuller
 from statsmodels.regression.linear_model import OLS
-import pandas as pd
+import matplotlib.pyplot as plt
+
+
+def adf():
+    N = 1000
+    runs = 100
+    alpha, beta = 0.3, 0.7
+
+    for run in range(runs):
+        series = np.ones(N) * 10000
+
+        for i in range(2, N):
+            series[i] = alpha * series[i - 2] + beta * series[i - 1] + np.random.normal()
+        plt.plot(series)
+    plt.show()
+
+
+def adf_raw_price():
+    gamma = 1
+    alpha = 0.5
+    beta = 0.9  # stationary time series
+    N = 1000
+
+    trials = 100
+    count = 0
+
+    all_returns = []
+
+    for _ in range(trials):
+        series = np.zeros(N)
+        series[0] = 10
+        for t in range(1, N):
+            series[t] = gamma + alpha * t + beta * series[t - 1] + np.random.normal()
+            # series[t] = gamma + beta * series[t - 1] + np.random.normal()
+        # plt.plot(series)
+
+        returns = np.diff(series) / series[:-1]
+        # plt.plot(returns)
+        # print(max(returns))
+
+        all_returns.append(returns)
+
+        adf_test = adfuller(series, regression='ct')
+        adf_stat = adf_test[0]
+        adf_1pct = adf_test[4]['1%']
+
+        if adf_stat < adf_1pct:
+            count += 1
+
+    all_returns = np.array(all_returns)
+    vars_over_time = np.zeros(N-1)
+    for t in range(N-1):
+        vars_over_time[t] = np.var(all_returns[:, t])
+
+    plt.plot(vars_over_time[200:], label='Variance Over Time')
+    print(vars_over_time)
+    plt.legend()
+
+    print("Stationary: {}/{}".format(count, trials))
+    print("Non-stationary: {}/{}".format(trials-count, trials))
+
+    plt.show()
+
 
 def dickey_fuller():
     normal_series = np.random.normal(size=1000)
@@ -27,4 +90,6 @@ def dickey_fuller():
 
 
 if __name__ == "__main__":
-    dickey_fuller()
+    # dickey_fuller()
+    # adf()
+    adf_raw_price()
