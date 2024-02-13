@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import math
 from statsmodels.tsa.stattools import adfuller
 from statsmodels.regression.linear_model import OLS
 import matplotlib.pyplot as plt
@@ -19,8 +20,9 @@ def adf():
     plt.show()
 
 
-def adf_raw_price():
-    gamma = 1
+def adf_price(price_type, return_type, noise=True):
+    np.random.seed(1711)
+    mu = 2
     alpha = 0.5
     beta = 0.9  # stationary time series
     N = 1000
@@ -32,16 +34,33 @@ def adf_raw_price():
 
     for _ in range(trials):
         series = np.zeros(N)
-        series[0] = 10
+        epsilons = np.zeros(N)
+        series[0] = mu
         for t in range(1, N):
-            series[t] = gamma + alpha * t + beta * series[t - 1] + np.random.normal()
-            # series[t] = gamma + beta * series[t - 1] + np.random.normal()
+            epsilon = np.random.normal() if noise else 0
+            epsilons[t] = epsilon
+            if price_type == 'raw':
+                series[t] = mu + alpha*t + beta*series[t-1] + epsilon
+            elif price_type == 'log':
+                series[t] = np.exp(mu + beta*np.log(series[t-1]) + epsilon)
+
+            if math.isinf(series[t]) or math.isnan(series[t]):
+                print(series)
+
         # plt.plot(series)
 
-        returns = np.diff(series) / series[:-1]
-        # plt.plot(returns)
-        # print(max(returns))
+        if return_type == 'raw':
+            returns = np.diff(series) / series[:-1]
 
+            # time_steps = np.arange(1, N)
+            # returns = (mu + alpha*time_steps + epsilons[1:]) / series[:-1] + (beta-1)
+        elif return_type == 'log':
+            returns = np.diff(np.log(series)) / np.log(series[:-1])
+
+            # time_steps = np.arange(0, N)
+            # returns = (mu + alpha*time_steps + + epsilons[1:]) / np.log(series) + (beta-1)
+
+        plt.plot(returns[50:])
         all_returns.append(returns)
 
         adf_test = adfuller(series, regression='ct')
@@ -56,8 +75,8 @@ def adf_raw_price():
     for t in range(N-1):
         vars_over_time[t] = np.var(all_returns[:, t])
 
-    plt.plot(vars_over_time[200:], label='Variance Over Time')
-    print(vars_over_time)
+    # plt.plot(vars_over_time[300:], label='Variance Over Time')
+    # print(vars_over_time)
     plt.legend()
 
     print("Stationary: {}/{}".format(count, trials))
@@ -89,7 +108,54 @@ def dickey_fuller():
     print('adf_result', adf_result)
 
 
+def adf_random_walks():
+    alpha = 1
+    beta = 1  # stationary time series
+    N = 1000
+
+    trials = 100
+    count = 0
+
+    all_returns = []
+
+    for _ in range(trials):
+        series = np.zeros(N)
+        series[0] = np.random.normal()
+        for t in range(1, N):
+            series[t] = alpha*t + beta*series[t - 1] + np.random.normal()
+
+        # Converting the value to log
+        returns = np.diff(series) / series[:-1]
+        # plt.plot(returns)
+        # print(max(returns))
+        # plt.plot(series)
+
+        all_returns.append(returns)
+
+        adf_test = adfuller(series, regression='ct')
+        adf_stat = adf_test[0]
+        adf_1pct = adf_test[4]['1%']
+
+        if adf_stat < adf_1pct:
+            count += 1
+
+    all_returns = np.array(all_returns)
+    vars_over_time = np.zeros(N - 1)
+    for t in range(N - 1):
+        vars_over_time[t] = np.var(all_returns[:, t])
+
+    plt.plot(vars_over_time[200:], label='Variance Over Time')
+    print(vars_over_time)
+    plt.legend()
+
+    print("Stationary: {}/{}".format(count, trials))
+    print("Non-stationary: {}/{}".format(trials - count, trials))
+
+    plt.show()
+
+
 if __name__ == "__main__":
     # dickey_fuller()
     # adf()
-    adf_raw_price()
+    adf_price(price_type='raw', return_type='raw', noise=True)
+    # adf_random_walks()
