@@ -20,7 +20,7 @@ def adf():
     plt.show()
 
 
-def adf_price(return_type, noise=True):
+def adf_price(price_type, return_type, noise=True):
     np.random.seed(1711)
     mu = 2
     alpha = 0.5
@@ -39,10 +39,14 @@ def adf_price(return_type, noise=True):
         for t in range(1, N):
             epsilon = np.random.normal() if noise else 0
             epsilons[t] = epsilon
-            series[t] = mu + alpha*t + beta*series[t-1] + epsilon
+
+            if price_type == 'raw':
+                series[t] = mu + beta*series[t-1] + epsilon
+            elif price_type == 'log':
+                series[t] = np.exp(mu + beta*np.log(series[t-1]) + epsilon)
 
             if math.isinf(series[t]) or math.isnan(series[t]):
-                print(series)
+                print(series[:t+1])
 
         # plt.plot(series)
 
@@ -72,8 +76,8 @@ def adf_price(return_type, noise=True):
     for t in range(N-1):
         vars_over_time[t] = np.var(all_returns[:, t])
 
-    # plt.plot(vars_over_time[300:], label='Variance Over Time')
-    # print(vars_over_time)
+    # plt.plot(vars_over_time[100:], label='Variance Over Time')
+    print(vars_over_time)
     plt.legend()
 
     print("Stationary: {}/{}".format(count, trials))
@@ -154,5 +158,5 @@ def adf_random_walks():
 if __name__ == "__main__":
     # dickey_fuller()
     # adf()
-    adf_price(return_type='log', noise=True)
+    adf_price(price_type='raw', return_type='raw', noise=True)
     # adf_random_walks()
