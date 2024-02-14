@@ -20,7 +20,7 @@ def adf():
     plt.show()
 
 
-def adf_price(price_type, return_type, noise=True):
+def adf_price(return_type, noise=True):
     np.random.seed(1711)
     mu = 2
     alpha = 0.5
@@ -39,10 +39,7 @@ def adf_price(price_type, return_type, noise=True):
         for t in range(1, N):
             epsilon = np.random.normal() if noise else 0
             epsilons[t] = epsilon
-            if price_type == 'raw':
-                series[t] = mu + alpha*t + beta*series[t-1] + epsilon
-            elif price_type == 'log':
-                series[t] = np.exp(mu + beta*np.log(series[t-1]) + epsilon)
+            series[t] = mu + alpha*t + beta*series[t-1] + epsilon
 
             if math.isinf(series[t]) or math.isnan(series[t]):
                 print(series)
@@ -157,5 +154,5 @@ def adf_random_walks():
 if __name__ == "__main__":
     # dickey_fuller()
     # adf()
-    adf_price(price_type='raw', return_type='raw', noise=True)
+    adf_price(return_type='log', noise=True)
     # adf_random_walks()
